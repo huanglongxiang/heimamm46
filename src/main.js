@@ -5,7 +5,11 @@ import router from './router/index.js'
 
 // 导入element-io的样式
 import ElementUi from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUi)
+
+// 导入全局样式
+import './style/base.css'
 
 Vue.config.productionTip = false
 
