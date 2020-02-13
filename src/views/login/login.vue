@@ -9,6 +9,9 @@
         <div class="line"></div>
         <span class="login_title">用户登录</span>
       </div>
+      <el-input class="input-text" placeholder="请输入手机号" prefix-icon="el-icon-user" v-model="phoneNum"></el-input>
+      <el-input class="input-text"  show-password placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="userProw"></el-input>
+      <el-input class="input-text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="verify"></el-input>
     </div>
     <img src="../../assets/login_banner_ele.png" alt />
   </div>
@@ -17,7 +20,14 @@
 <script>
 export default {
   // 写入组件可以便于调试
-  name: "login"
+  name: "login",
+  data() {
+      return {
+          phoneNum: '',
+          userProw: '',
+          verify: ''
+      }
+  },
 };
 </script>
 
@@ -41,9 +51,10 @@ export default {
     box-sizing: border-box;
     background: rgba(245, 245, 245, 1);
     .title-box {
-        display: flex;
-        align-items: center;
-        color: rgba(12, 12, 12, 1);
+      display: flex;
+      align-items: center;
+      color: rgba(12, 12, 12, 1);
+      margin-bottom: 29px;
       .title-icon {
         width: 22px;
         height: 17px;
@@ -58,12 +69,15 @@ export default {
       .title {
         font-size: 24px;
         font-family: SourceHanSansCN;
-        font-weight: 400;          
+        font-weight: 400;
       }
-      .login_title{
-        font-size:22px;
+      .login_title {
+        font-size: 22px;
         font-family: SourceHanSansCN;
       }
+    }
+    .input-text{
+        margin-bottom: 25px;
     }
   }
 }
