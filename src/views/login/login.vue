@@ -13,26 +13,29 @@
       <el-form ref="form" :model="loginFrom" label-width="0">
         <!-- 手机号 -->
         <el-form-item>
-          <el-input v-model="loginFrom.phoneNum"
-          placeholder="请输入手机号"
-          prefix-icon="el-icon-user"></el-input>
+          <el-input v-model="loginFrom.phoneNum" placeholder="请输入手机号" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item>
-          <el-input v-model="loginFrom.userProw"
-           placeholder="请输入密码"
-           prefix-icon="el-icon-lock"></el-input>
+          <el-input v-model="loginFrom.userProw" placeholder="请输入密码" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
         <!-- 验证码 -->
         <el-form-item>
-          <el-input v-model="loginFrom.verify"
-           placeholder="请输入验证码"
-           prefix-icon="el-icon-key"></el-input>
+          <el-row>
+            <el-col :span="17">
+              <el-input v-model="loginFrom.verify" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
+            </el-col>
+            <el-col :span="7">
+              <img class="login-code" src="../../assets/login_captcha.png" alt />
+            </el-col>
+          </el-row>
         </el-form-item>
         <!-- 同意按钮 -->
         <el-form-item>
           <el-checkbox v-model="loginFrom.isChecked" name="type">
-            我已阅读并同意用户协议和隐私条款
+            我已阅读并同意
+            <el-link type="primary">用户协议</el-link>和
+            <el-link type="primary">隐私条款</el-link>
           </el-checkbox>
         </el-form-item>
         <!-- 登录与注册 -->
@@ -115,6 +118,20 @@ export default {
     }
     .input-text {
       margin-bottom: 25px;
+    }
+    .login-code {
+      width: 100%;
+      height: 40px;
+    }
+    //
+    .el-checkbox {
+      display: flex;
+      align-items: center;
+      .el-checkbox__label {
+        display: flex;
+        padding-left: 5px;
+        margin-top: -2px;
+      }
     }
   }
 }
