@@ -40,10 +40,8 @@
         </el-form-item>
         <!-- 登录与注册 -->
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">登录</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">注册</el-button>
+          <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+          <el-button class="login-btn" type="primary">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -123,7 +121,7 @@ export default {
       width: 100%;
       height: 40px;
     }
-    //
+    // 协议区布局
     .el-checkbox {
       display: flex;
       align-items: center;
@@ -132,6 +130,12 @@ export default {
         padding-left: 5px;
         margin-top: -2px;
       }
+    }
+    // 按钮样式修改
+    .login-btn{
+      width: 100%;
+      margin-bottom: 24px;
+      margin-left: 0;
     }
   }
 }
