@@ -9,9 +9,40 @@
         <div class="line"></div>
         <span class="login_title">用户登录</span>
       </div>
-      <el-input class="input-text" placeholder="请输入手机号" prefix-icon="el-icon-user" v-model="phoneNum"></el-input>
-      <el-input class="input-text"  show-password placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="userProw"></el-input>
-      <el-input class="input-text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="verify"></el-input>
+      <!-- 登录表单 -->
+      <el-form ref="form" :model="loginFrom" label-width="0">
+        <!-- 手机号 -->
+        <el-form-item>
+          <el-input v-model="loginFrom.phoneNum"
+          placeholder="请输入手机号"
+          prefix-icon="el-icon-user"></el-input>
+        </el-form-item>
+        <!-- 密码 -->
+        <el-form-item>
+          <el-input v-model="loginFrom.userProw"
+           placeholder="请输入密码"
+           prefix-icon="el-icon-lock"></el-input>
+        </el-form-item>
+        <!-- 验证码 -->
+        <el-form-item>
+          <el-input v-model="loginFrom.verify"
+           placeholder="请输入验证码"
+           prefix-icon="el-icon-key"></el-input>
+        </el-form-item>
+        <!-- 同意按钮 -->
+        <el-form-item>
+          <el-checkbox v-model="loginFrom.isChecked" name="type">
+            我已阅读并同意用户协议和隐私条款
+          </el-checkbox>
+        </el-form-item>
+        <!-- 登录与注册 -->
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">登录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary">注册</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <img src="../../assets/login_banner_ele.png" alt />
   </div>
@@ -22,12 +53,18 @@ export default {
   // 写入组件可以便于调试
   name: "login",
   data() {
-      return {
-          phoneNum: '',
-          userProw: '',
-          verify: ''
+    return {
+      loginFrom: {
+        phoneNum: "", // 手机号
+        userProw: "", //密码
+        verify: "", //验证码
+        isChecked: false //协议按钮
       }
+    };
   },
+  methods: {
+    onSubmit() {}
+  }
 };
 </script>
 
@@ -76,8 +113,8 @@ export default {
         font-family: SourceHanSansCN;
       }
     }
-    .input-text{
-        margin-bottom: 25px;
+    .input-text {
+      margin-bottom: 25px;
     }
   }
 }
