@@ -21,20 +21,20 @@
       </el-form-item>
       <el-form-item label="图形码" :label-width="formLabelWidth">
           <el-row>
-              <el-col :span="17">
+              <el-col :span="16">
                   <el-input v-model="form.name" autocomplete="off"></el-input>
               </el-col>
-              <el-col :span="7">
+              <el-col :span="7" :offset="1">
                   <img class="login-code" src="../../../assets/login_captcha.png">
               </el-col>
           </el-row>
       </el-form-item>
       <el-form-item label="验证码" :label-width="formLabelWidth">
           <el-row>
-              <el-col :span="17">
+              <el-col :span="16">
                   <el-input v-model="form.name" autocomplete="off"></el-input>
               </el-col>
-              <el-col :span="7">
+              <el-col :span="7" :offset="1">
                   <el-button>获取验证码</el-button>
               </el-col>
           </el-row>

@@ -73,9 +73,10 @@ export default {
         isChecked: false //协议按钮
       },
       rules: {
+        // trigger 为 change 时是边打字边校验
         userProw: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "密码的长度为6-12位", trigger: "blur" }
+          { min: 6, max: 12, message: "密码的长度为6-12位", trigger: "change" }
         ],
         verify: [
           { required: true, message: "请输入验证码", trigger: "blur" },
