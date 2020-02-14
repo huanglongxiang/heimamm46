@@ -10,17 +10,22 @@
         <span class="login_title">用户登录</span>
       </div>
       <!-- 登录表单 -->
-      <el-form ref="form" :model="loginFrom" label-width="0">
+      <el-form ref="loginForm" :rules="rules" :model="loginFrom" label-width="0">
         <!-- 手机号 -->
         <el-form-item>
           <el-input v-model="loginFrom.phoneNum" placeholder="请输入手机号" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item>
-          <el-input v-model="loginFrom.userProw" placeholder="请输入密码" prefix-icon="el-icon-lock"></el-input>
+        <el-form-item prop="userProw">
+          <el-input
+            v-model="loginFrom.userProw"
+            placeholder="请输入密码"
+            prefix-icon="el-icon-lock"
+            show-password
+          ></el-input>
         </el-form-item>
         <!-- 验证码 -->
-        <el-form-item>
+        <el-form-item prop="verify">
           <el-row>
             <el-col :span="17">
               <el-input v-model="loginFrom.verify" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
@@ -40,7 +45,7 @@
         </el-form-item>
         <!-- 登录与注册 -->
         <el-form-item>
-          <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+          <el-button class="login-btn" type="primary" @click="onSubmit('loginForm')">登录</el-button>
           <el-button class="login-btn" type="primary">注册</el-button>
         </el-form-item>
       </el-form>
@@ -60,11 +65,36 @@ export default {
         userProw: "", //密码
         verify: "", //验证码
         isChecked: false //协议按钮
+      },
+      rules: {
+        userProw: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 12, message: "密码的长度为6-12位", trigger: "blur" }
+        ],
+        verify: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
+          { min: 4, max: 4, message: "验证码的长度为4位", trigger: "blur" }
+        ]
       }
     };
   },
   methods: {
-    onSubmit() {}
+    // 登录
+    onSubmit(formName) {
+      // 上面传入的 formName 是 ruleForm
+      // $refs 的作用是获取页面中使用 ref 标记的元素
+      // 等同于 this.$refs['loginForm'] 相当于获取了 Element-ui 的表单
+      // this.$refs['loginFrom] 等同于 this.$refs.loginForm
+      // validate 这个方法是 Element-ui 的表单的方法
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$message.success('验证成功');
+        } else {
+          this.$message.error('验证失败');
+          return false;
+        }
+      })
+    }
   }
 };
 </script>
@@ -117,9 +147,12 @@ export default {
     .input-text {
       margin-bottom: 25px;
     }
-    .login-code {
-      width: 100%;
+    .el-col-7 {
       height: 40px;
+      .login-code {
+        width: 100%;
+        height: 40px;
+      }
     }
     // 协议区布局
     .el-checkbox {
@@ -132,7 +165,7 @@ export default {
       }
     }
     // 按钮样式修改
-    .login-btn{
+    .login-btn {
       width: 100%;
       margin-bottom: 24px;
       margin-left: 0;
