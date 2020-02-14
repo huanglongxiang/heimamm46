@@ -46,18 +46,24 @@
         <!-- 登录与注册 -->
         <el-form-item>
           <el-button class="login-btn" type="primary" @click="onSubmit('loginForm')">登录</el-button>
-          <el-button class="login-btn" type="primary">注册</el-button>
+          <el-button class="login-btn" type="primary" @click="onGoRegister">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <img src="../../assets/login_banner_ele.png" alt />
+    <v-register ref="register"></v-register>
   </div>
 </template>
 
 <script>
+import vRegister from './components/register'
+
 export default {
   // 写入组件可以便于调试
   name: "login",
+  components: {
+    vRegister
+  },
   data() {
     return {
       loginFrom: {
@@ -94,6 +100,10 @@ export default {
           return false;
         }
       })
+    },
+    // 注册
+    onGoRegister() {
+      this.$refs.register.dialogFormVisible = true;
     }
   }
 };
