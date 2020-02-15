@@ -31,7 +31,7 @@
               <el-input v-model="loginFrom.verify" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
             </el-col>
             <el-col :span="7">
-              <img class="login-code" :src="captcha" alt />
+              <img class="login-code" @click="changeCaptcha" :src="captcha" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -107,6 +107,11 @@ export default {
     // 注册
     onGoRegister() {
       this.$refs.register.dialogFormVisible = true;
+    },
+    // 切换验证码
+    changeCaptcha() {
+      // 根据时间戳来刷新验证码
+      this.captcha = this.captcha + Date.now();
     }
   }
 };

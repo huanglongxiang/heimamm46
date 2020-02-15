@@ -16,7 +16,7 @@
       <el-form-item label="手机" prop="userPhone" :label-width="formLabelWidth">
         <el-input v-model="registerForm.userPhone" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item  label="密码" prop="userProssword" :label-width="formLabelWidth">
+      <el-form-item label="密码" prop="userProssword" :label-width="formLabelWidth">
         <el-input show-password v-model="registerForm.userProssword" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="图形码" :label-width="formLabelWidth">
@@ -25,7 +25,7 @@
             <el-input v-model="registerForm.imgYard" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <img class="login-code" :src="captchas" />
+            <img class="login-code" @click="changeCaptcha" :src="captchas" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -35,7 +35,9 @@
             <el-input v-model="registerForm.verify" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <el-button>获取验证码</el-button>
+            <el-button :disabled="delay != 0" @click="getCaptcha">
+                {{delay === 0 ? "获取验证码":`还有${delay}秒重新获取`}}
+            </el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -48,7 +50,8 @@
 </template>
 
 <script>
-import $http from '../../../js/http.js'
+import $http from "../../../js/http.js";
+import axios from "axios";
 
 const phoneChar = (rule, value, callback) => {
   if (!value) {
@@ -63,17 +66,17 @@ const phoneChar = (rule, value, callback) => {
   }
 };
 const emailChar = (rule, value, callback) => {
-    if (!value) {
+  if (!value) {
     return callback(new Error("请输入用户名称"));
   } else {
-      let _reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-      if (_reg.test(value)) {
-          callback();
-      } else {
-          callback(new Error("邮箱格式错误，请输入正确邮箱"));
-      }
+    let _reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    if (_reg.test(value)) {
+      callback();
+    } else {
+      callback(new Error("邮箱格式错误，请输入正确邮箱"));
+    }
   }
-}
+};
 
 export default {
   name: "register",
@@ -109,8 +112,50 @@ export default {
         ]
       },
       // 请求验证码
-      captchas: $http.getCaptcha.url
+      captchas: $http.getCaptcha.url,
+      // 倒计时
+      delay: 0
     };
+  },
+  methods: {
+    // 改变图像验证码
+    changeCaptcha() {
+      // 改变验证码
+      this.captchas = this.captchas + Date.now();
+    },
+    // 获取验证码
+    getCaptcha() {
+      if (!this.delay) {
+        this.delay = 60;
+        // 开始倒计时
+        const interId = setInterval(() => {
+            // 时间递减
+            this.delay--;
+            // 时间结束清除倒计时
+            if (!this.delay) {
+                clearInterval(interId);
+            }
+        }, 100);
+        // 请求短信验证码
+        axios({
+          url: $http.getSendNote.url,
+          method: $http.getSendNote.method,
+          data: {
+            code: this.registerForm.imgYard,
+            phone: this.registerForm.userPhone
+          },
+          // 标识 cookie ，在请求发送的时候连带 cookie 进行发送 。。。
+          // 但是存在 发送请求中包含 cookie 却没有 SameSite( cookie 的一个属性，谷歌默认是 lax)
+          withCredentials: true
+        }).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.$message.success("验证码获取成功：" + res.data.data.captcha);
+          } else {
+            this.$message.error(res.data.message);
+          }
+        });
+      }
+    }
   }
 };
 </script>
@@ -128,6 +173,9 @@ export default {
     .login-code {
       width: 100%;
       height: 40px;
+    }
+    .el-button--default{
+        width: 100%;
     }
   }
 }
