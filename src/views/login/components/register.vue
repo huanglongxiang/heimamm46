@@ -7,9 +7,21 @@
     :visible.sync="dialogFormVisible"
   >
     <el-form status-icon :model="registerForm" :rules="rules">
-        <!-- 图像信息 -->
-        
-        <!-- 文本信息 -->
+      <!-- 图像信息 -->
+      {{&nbsp;}}<el-form-item label="头像">
+        <el-upload
+          class="avatar-uploader"
+          :action="uploadsUrl"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          name="image"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
+      <!-- 文本信息 -->
       <el-form-item label="昵称" prop="userName" :label-width="formLabelWidth">
         <el-input v-model="registerForm.userName" autocomplete="off"></el-input>
       </el-form-item>
@@ -38,9 +50,10 @@
             <el-input v-model="registerForm.verify" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <el-button :disabled="delay != 0" @click="getCaptcha">
-                {{delay === 0 ? "获取验证码":`还有${delay}秒重新获取`}}
-            </el-button>
+            <el-button
+              :disabled="delay != 0"
+              @click="getCaptcha"
+            >{{delay === 0 ? "获取验证码":`还有${delay}秒重新获取`}}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -54,7 +67,7 @@
 
 <script>
 import $http from "../../../js/http.js";
-import axios from "axios";
+import { sendsms } from "../../../api/register"
 
 const phoneChar = (rule, value, callback) => {
   if (!value) {
@@ -117,7 +130,11 @@ export default {
       // 请求验证码
       captchas: $http.getCaptcha.url,
       // 倒计时
-      delay: 0
+      delay: 0,
+      // 图片本机地址
+      imageUrl: "",
+      // 图片上传地址
+      uploadsUrl: $http.getUploads.url
     };
   },
   methods: {
@@ -132,25 +149,29 @@ export default {
         this.delay = 60;
         // 开始倒计时
         const interId = setInterval(() => {
-            // 时间递减
-            this.delay--;
-            // 时间结束清除倒计时
-            if (!this.delay) {
-                clearInterval(interId);
-            }
+          // 时间递减
+          this.delay--;
+          // 时间结束清除倒计时
+          if (!this.delay) {
+            clearInterval(interId);
+          }
         }, 100);
         // 请求短信验证码
-        axios({
-          url: $http.getSendNote.url,
-          method: $http.getSendNote.method,
-          data: {
+        // axios({
+        //   url: $http.getSendNote.url,
+        //   method: $http.getSendNote.method,
+        //   data: {
+        //     code: this.registerForm.imgYard,
+        //     phone: this.registerForm.userPhone
+        //   },
+        //   // 标识 cookie ，在请求发送的时候连带 cookie 进行发送 。。。
+        //   // 但是存在 发送请求中包含 cookie 却没有 SameSite( cookie 的一个属性，谷歌默认是 lax)
+        //   withCredentials: true
+        // })
+        sendsms({
             code: this.registerForm.imgYard,
             phone: this.registerForm.userPhone
-          },
-          // 标识 cookie ，在请求发送的时候连带 cookie 进行发送 。。。
-          // 但是存在 发送请求中包含 cookie 却没有 SameSite( cookie 的一个属性，谷歌默认是 lax)
-          withCredentials: true
-        }).then(res => {
+          }).then(res => {
           if (res.status === 200 && res.data.code === 200) {
             this.$message.success("验证码获取成功：" + res.data.data.captcha);
           } else {
@@ -158,6 +179,22 @@ export default {
           }
         });
       }
+    },
+    // 图片上传
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg" || "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     }
   }
 };
@@ -177,9 +214,36 @@ export default {
       width: 100%;
       height: 40px;
     }
-    .el-button--default{
-        width: 100%;
+    .el-button--default {
+      width: 100%;
     }
+  }
+  // 用户图片上传
+  .avatar-uploader {
+      text-align: center;
+    .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 }
 </style>

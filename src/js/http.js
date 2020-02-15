@@ -5,7 +5,11 @@ const LIST_CONTENT = {
         method: 'get'
     },
     getSendNote: {
-        url: process.env.VUE_APP_ONURL + '/sendsms',
+        url: process.env.VUE_APP_URL + '/sendsms',
+        method: 'post'
+    },
+    getUploads: {
+        url: process.env.VUE_APP_URL + '/uploads',
         method: 'post'
     }
 }
