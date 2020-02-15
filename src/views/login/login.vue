@@ -58,6 +58,8 @@
 <script>
 import vRegister from './components/register'
 
+window.console.log("项目基地址：",process.env.VUE_APP_URL);
+
 export default {
   // 写入组件可以便于调试
   name: "login",
