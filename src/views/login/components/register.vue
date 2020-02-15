@@ -6,39 +6,38 @@
     title="收货地址"
     :visible.sync="dialogFormVisible"
   >
-    <el-form :model="form">
-      <el-form-item label="昵称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+    <el-form status-icon :model="registerForm" :rules="rules">
+      <el-form-item label="昵称" prop="userName" :label-width="formLabelWidth">
+        <el-input v-model="registerForm.userName" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form-item label="邮箱" prop="userEmail" :label-width="formLabelWidth">
+        <el-input v-model="registerForm.userEmail" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="手机" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form-item label="手机" prop="userPhone" :label-width="formLabelWidth">
+        <el-input v-model="registerForm.userPhone" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form-item  label="密码" prop="userProssword" :label-width="formLabelWidth">
+        <el-input show-password v-model="registerForm.userProssword" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="图形码" :label-width="formLabelWidth">
-          <el-row>
-              <el-col :span="16">
-                  <el-input v-model="form.name" autocomplete="off"></el-input>
-              </el-col>
-              <el-col :span="7" :offset="1">
-                  <img class="login-code" src="../../../assets/login_captcha.png">
-              </el-col>
-          </el-row>
+        <el-row>
+          <el-col :span="16">
+            <el-input v-model="registerForm.imgYard" autocomplete="off"></el-input>
+          </el-col>
+          <el-col :span="7" :offset="1">
+            <img class="login-code" src="../../../assets/login_captcha.png" />
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="验证码" :label-width="formLabelWidth">
-          <el-row>
-              <el-col :span="16">
-                  <el-input v-model="form.name" autocomplete="off"></el-input>
-              </el-col>
-              <el-col :span="7" :offset="1">
-                  <el-button>获取验证码</el-button>
-              </el-col>
-          </el-row>
-        
+        <el-row>
+          <el-col :span="16">
+            <el-input v-model="registerForm.verify" autocomplete="off"></el-input>
+          </el-col>
+          <el-col :span="7" :offset="1">
+            <el-button>获取验证码</el-button>
+          </el-col>
+        </el-row>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -49,15 +48,64 @@
 </template>
 
 <script>
+const phoneChar = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error("请输入用户名称"));
+  } else {
+    let _reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+    if (_reg.test(value)) {
+      callback();
+    } else {
+      callback(new Error("手机号码格式错误，请输入正确手机号"));
+    }
+  }
+};
+const emailChar = (rule, value, callback) => {
+    if (!value) {
+    return callback(new Error("请输入用户名称"));
+  } else {
+      let _reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+      if (_reg.test(value)) {
+          callback();
+      } else {
+          callback(new Error("邮箱格式错误，请输入正确邮箱"));
+      }
+  }
+}
+
 export default {
   name: "register",
   data() {
     return {
-      form: {
-        name: ""
+      // 表单数据
+      registerForm: {
+        userName: "",
+        userEmail: "",
+        userPhone: "",
+        userProssword: "",
+        imgYard: "",
+        verify: ""
       },
       formLabelWidth: "62px",
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      rules: {
+        userName: [
+          { required: true, message: "用户名不能为空", trigger: "blur" },
+          { min: 4, message: "用户名长度不得少于6位", trigger: "change" }
+        ],
+        userEmail: [
+          { required: true, message: "邮箱不能为空", trigger: "blur" },
+          { validator: emailChar, trigger: "blur" }
+        ],
+        userPhone: [
+          { required: true, message: "手机号码不能为空", trigger: "blur" },
+          { validator: phoneChar, trigger: "blur" }
+        ],
+        userProssword: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 12, message: "密码的长度为6-12位", trigger: "change" }
+        ]
+      }
     };
   }
 };
@@ -72,11 +120,11 @@ export default {
     color: white;
   }
   .el-col-7 {
+    height: 40px;
+    .login-code {
+      width: 100%;
       height: 40px;
-      .login-code{
-          width: 100%;
-          height: 40px;
-      }
+    }
   }
 }
 </style>
