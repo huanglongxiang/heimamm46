@@ -7,6 +7,9 @@
     :visible.sync="dialogFormVisible"
   >
     <el-form status-icon :model="registerForm" :rules="rules">
+        <!-- 图像信息 -->
+        
+        <!-- 文本信息 -->
       <el-form-item label="昵称" prop="userName" :label-width="formLabelWidth">
         <el-input v-model="registerForm.userName" autocomplete="off"></el-input>
       </el-form-item>
