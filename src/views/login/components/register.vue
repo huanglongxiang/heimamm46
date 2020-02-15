@@ -25,7 +25,7 @@
             <el-input v-model="registerForm.imgYard" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <img class="login-code" src="../../../assets/login_captcha.png" />
+            <img class="login-code" :src="captchas" />
           </el-col>
         </el-row>
       </el-form-item>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import $http from '../../../js/http.js'
+
 const phoneChar = (rule, value, callback) => {
   if (!value) {
     return callback(new Error("请输入用户名称"));
@@ -105,7 +107,9 @@ export default {
           { required: true, message: "密码不能为空", trigger: "blur" },
           { min: 6, max: 12, message: "密码的长度为6-12位", trigger: "change" }
         ]
-      }
+      },
+      // 请求验证码
+      captchas: $http.getCaptcha.url
     };
   }
 };

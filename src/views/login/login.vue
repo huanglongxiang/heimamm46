@@ -31,7 +31,7 @@
               <el-input v-model="loginFrom.verify" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
             </el-col>
             <el-col :span="7">
-              <img class="login-code" src="../../assets/login_captcha.png" alt />
+              <img class="login-code" :src="captcha" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -57,8 +57,7 @@
 
 <script>
 import vRegister from './components/register'
-
-window.console.log("项目基地址：",process.env.VUE_APP_URL);
+import $http from '../../js/http.js'
 
 export default {
   // 写入组件可以便于调试
@@ -84,7 +83,8 @@ export default {
           { required: true, message: "请输入验证码", trigger: "blur" },
           { min: 4, max: 4, message: "验证码的长度为4位", trigger: "blur" }
         ]
-      }
+      },
+      captcha: $http.getCaptcha.url
     };
   },
   methods: {
