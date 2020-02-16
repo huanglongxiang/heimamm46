@@ -6,9 +6,8 @@
     title="收货地址"
     :visible.sync="dialogFormVisible"
   >
-    <el-form status-icon :model="registerForm" :rules="rules">
+    <el-form status-icon :model="registerForm" :rules="rules" ref="registerSubmit">
       <!-- 图像信息 -->
-      {{&nbsp;}}
       <el-form-item label="头像" prop="avatar" :label-width="formLabelWidth">
         <el-upload
           class="avatar-uploader"
@@ -61,7 +60,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="onSubmit('registerSubmit')">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -143,6 +142,22 @@ export default {
     };
   },
   methods: {
+    //注册表单提交
+    onSubmit(formName) {
+      // 上面传入的 formName 是 ruleForm
+      // $refs 的作用是获取页面中使用 ref 标记的元素
+      // 等同于 this.$refs['loginForm'] 相当于获取了 Element-ui 的表单
+      // this.$refs['loginFrom] 等同于 this.$refs.loginForm
+      // validate 这个方法是 Element-ui 的表单的方法
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$message.success("验证成功");
+        } else {
+          this.$message.error("验证失败");
+          return false;
+        }
+      });
+    },
     // 改变图像验证码
     changeCaptcha() {
       // 改变验证码
@@ -188,7 +203,7 @@ export default {
     },
     // 图片上传
     handleAvatarSuccess(res, file) {
-        window.console.log(res);
+      window.console.log(res);
       this.imageUrl = URL.createObjectURL(file.raw);
       // 存储头像地址
       this.registerForm.avatar = res.data.file_path;
