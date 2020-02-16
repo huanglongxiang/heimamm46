@@ -8,10 +8,10 @@
       </div>
       <div class="right">
         <span class="r-userIcon">
-          <img src alt />
+          <img :src="userlogin.avatar" alt />
         </span>
-        <span class="UserName">你好，傻逼</span>
-        <el-button type="primary">退出</el-button>
+        <span class="UserName">你好，{{userlogin.username}}</span>
+        <el-button type="primary" @click="exitLogin">退出</el-button>
       </div>
     </el-header>
     <el-container>
@@ -22,19 +22,35 @@
 </template>
 
 <script>
-import { getToken } from '@/utils/token.js'
-import { getInfo } from '@/api/index.js'
+import { getInfo,exitInfo } from '@/api/index.js'
+import { removeToken } from '@/utils/token'
 export default {
     name: 'index',
+    data() {
+        return {
+            userlogin: {}
+        }
+    },
     created() {
         // 读取存储的 token
-        let token = getToken();
-        window.console.log(token)
-        getInfo({
-            token: token
-        }).then(res => {
+        getInfo().then(res => {
             window.console.log(res);
+            if (res.data.code === 200) {
+                this.userlogin = res.data.data;
+                this.userlogin.avatar = process.env.VUE_APP_URL +'/'+  this.userlogin.avatar
+            }
         })
+    },
+    methods: {
+        // 注销逻辑
+        exitLogin() {
+            exitInfo().then(res => {
+                window.console.log(res);
+                if(res.code === 200) {
+                    removeToken();
+                }                
+            })
+        }
     }
 };
 </script>
@@ -75,7 +91,13 @@ export default {
         .r-userIcon{
             width:43px;
             height:43px;
-            background: #333;
+            overflow: hidden;
+            border-radius: 50%;
+            img {
+                width: 100%;
+                height: 100%;
+
+            }
         }
         .UserName{
             font-size:14px;
