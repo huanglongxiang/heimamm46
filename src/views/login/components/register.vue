@@ -8,7 +8,8 @@
   >
     <el-form status-icon :model="registerForm" :rules="rules">
       <!-- 图像信息 -->
-      {{&nbsp;}}<el-form-item label="头像">
+      {{&nbsp;}}
+      <el-form-item label="头像" prop="avatar" :label-width="formLabelWidth">
         <el-upload
           class="avatar-uploader"
           :action="uploadsUrl"
@@ -66,8 +67,8 @@
 </template>
 
 <script>
-import $http from "../../../js/http.js";
-import { sendsms } from "../../../api/register"
+import $http from "@/js/http.js";
+import { sendsms } from "@/api/register";
 
 const phoneChar = (rule, value, callback) => {
   if (!value) {
@@ -105,11 +106,15 @@ export default {
         userPhone: "",
         userProssword: "",
         imgYard: "",
-        verify: ""
+        verify: "",
+        avatar: ""
       },
       formLabelWidth: "62px",
       dialogFormVisible: false,
       rules: {
+        avatar: [
+          { required: true, message: "用户头像不能为空", trigger: "blur" }
+        ],
         userName: [
           { required: true, message: "用户名不能为空", trigger: "blur" },
           { min: 4, message: "用户名长度不得少于6位", trigger: "change" }
@@ -145,6 +150,18 @@ export default {
     },
     // 获取验证码
     getCaptcha() {
+      // 手机格式校验
+      let _reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if (!_reg.test(this.registerForm.userPhone)) {
+        // 直接调用弹层
+        this.$message.error("手机号码格式错误，请输入正确手机号");
+        return;
+      }
+      // 验证码格式校验
+      if (this.registerForm.imgYard.length != 4) {
+        this.$message.error("验证码长度错误，请输入正确的验证码");
+        return;
+      }
       if (!this.delay) {
         this.delay = 60;
         // 开始倒计时
@@ -157,21 +174,10 @@ export default {
           }
         }, 100);
         // 请求短信验证码
-        // axios({
-        //   url: $http.getSendNote.url,
-        //   method: $http.getSendNote.method,
-        //   data: {
-        //     code: this.registerForm.imgYard,
-        //     phone: this.registerForm.userPhone
-        //   },
-        //   // 标识 cookie ，在请求发送的时候连带 cookie 进行发送 。。。
-        //   // 但是存在 发送请求中包含 cookie 却没有 SameSite( cookie 的一个属性，谷歌默认是 lax)
-        //   withCredentials: true
-        // })
         sendsms({
-            code: this.registerForm.imgYard,
-            phone: this.registerForm.userPhone
-          }).then(res => {
+          code: this.registerForm.imgYard,
+          phone: this.registerForm.userPhone
+        }).then(res => {
           if (res.status === 200 && res.data.code === 200) {
             this.$message.success("验证码获取成功：" + res.data.data.captcha);
           } else {
@@ -182,14 +188,17 @@ export default {
     },
     // 图片上传
     handleAvatarSuccess(res, file) {
+        window.console.log(res);
       this.imageUrl = URL.createObjectURL(file.raw);
+      // 存储头像地址
+      this.registerForm.avatar = res.data.file_path;
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg" || "image/png";
+      const isJPG = file.type === "image/jpeg" || "image/png" || "image/gif";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传头像图片只能是图像格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
@@ -220,7 +229,7 @@ export default {
   }
   // 用户图片上传
   .avatar-uploader {
-      text-align: center;
+    text-align: center;
     .el-upload {
       border: 1px dashed #d9d9d9;
       border-radius: 6px;

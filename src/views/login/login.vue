@@ -57,7 +57,7 @@
 
 <script>
 import vRegister from './components/register'
-import $http from '../../js/http.js'
+import $http from '@/js/http.js'
 
 export default {
   // 写入组件可以便于调试
@@ -110,7 +110,7 @@ export default {
     },
     // 切换验证码
     changeCaptcha() {
-      // 根据时间戳来刷新验证码
+      // 根据时间戳
       this.captcha = this.captcha + Date.now();
     }
   }
