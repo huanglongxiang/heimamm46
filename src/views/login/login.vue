@@ -12,7 +12,7 @@
       <!-- 登录表单 -->
       <el-form ref="loginForm" :rules="rules" :model="loginFrom" label-width="0">
         <!-- 手机号 -->
-        <el-form-item>
+        <el-form-item prop="phoneNum">
           <el-input v-model="loginFrom.phoneNum" placeholder="请输入手机号" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
@@ -58,6 +58,7 @@
 <script>
 import vRegister from './components/register'
 import $http from '@/js/http.js'
+import { phoneChar } from '@/utils/vatildator.js'
 
 export default {
   // 写入组件可以便于调试
@@ -74,6 +75,10 @@ export default {
         isChecked: false //协议按钮
       },
       rules: {
+        phoneNum: [
+          {required: true,message: "请输入手机号", trigger:"blur"},
+          {validator: phoneChar,trigger:"change"}
+        ],
         // trigger 为 change 时是边打字边校验
         userProw: [
           { required: true, message: "请输入密码", trigger: "blur" },
