@@ -144,11 +144,6 @@ export default {
   methods: {
     //注册表单提交
     onSubmit(formName) {
-      // 上面传入的 formName 是 ruleForm
-      // $refs 的作用是获取页面中使用 ref 标记的元素
-      // 等同于 this.$refs['loginForm'] 相当于获取了 Element-ui 的表单
-      // this.$refs['loginFrom] 等同于 this.$refs.loginForm
-      // validate 这个方法是 Element-ui 的表单的方法
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$message.success("验证成功");
@@ -203,10 +198,12 @@ export default {
     },
     // 图片上传
     handleAvatarSuccess(res, file) {
-      window.console.log(res);
       this.imageUrl = URL.createObjectURL(file.raw);
       // 存储头像地址
       this.registerForm.avatar = res.data.file_path;
+      // 由于 element-ui 只会检测表单元的更改，所以图片的更改需要手动去触发
+      // 通过 validateField 方法来进行触发
+      this.$refs.registerSubmit.validateField('avatar')
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg" || "image/png" || "image/gif";
