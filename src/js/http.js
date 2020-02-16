@@ -27,6 +27,16 @@ const LIST_CONTENT = {
     getLogin: {
         url: '/login',
         method: 'post'
+    },
+    // 首页--用户信息
+    getInfo: {
+        url: '/info',
+        method: 'get'
+    },
+    // 首页--登出
+    getLogout: {
+        url: '/logout',
+        method: 'get'
     }
 }
 

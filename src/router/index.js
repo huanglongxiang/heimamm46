@@ -7,12 +7,17 @@ Vue.use(VueRouter)
 
 // 组件引入
 import login from '../views/login/login.vue'
+import index from '@/views/index/index'
 // 创建路由对象
 const router = new VueRouter({
     routes:[
         {
             path: '/login',
             component: login
+        },
+        {
+            path: '/index',
+            component: index
         }
     ]
 })
