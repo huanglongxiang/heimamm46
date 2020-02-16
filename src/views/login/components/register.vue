@@ -34,7 +34,7 @@
       <el-form-item label="密码" prop="userProssword" :label-width="formLabelWidth">
         <el-input show-password v-model="registerForm.userProssword" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="图形码" :label-width="formLabelWidth">
+      <el-form-item label="图形码" prop="imgYard" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="16">
             <el-input v-model="registerForm.imgYard" autocomplete="off"></el-input>
@@ -44,7 +44,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="验证码" :label-width="formLabelWidth">
+      <el-form-item label="验证码" prop="verify" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="16">
             <el-input v-model="registerForm.verify" autocomplete="off"></el-input>
@@ -59,7 +59,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button @click="resetForm('registerSubmit')">取 消</el-button>
       <el-button type="primary" @click="onSubmit('registerSubmit')">确 定</el-button>
     </div>
   </el-dialog>
@@ -142,11 +142,17 @@ export default {
     };
   },
   methods: {
+    // 取消并清空表单
+    resetForm(formName) {
+        // 清空数据并关闭
+        this.$refs[formName].resetFields();
+        this.imageUrl = '';
+        this.dialogFormVisible = false;
+    },
     //注册表单提交
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-        //   this.$message.success("验证成功");
         // 成功逻辑
         userRegister({
             username:this.registerForm.userName,
@@ -158,7 +164,7 @@ export default {
         }).then(res => {
             if (res.data.code === 200) {
                 this.$message.success('恭喜你，注册成功');
-                this.dialogFormVisible = false;
+                this.resetForm(formName);
             } else if (res.data.code === 201) {
                 // 服务器返回信息
                 this.$message.error(res.data.message);
