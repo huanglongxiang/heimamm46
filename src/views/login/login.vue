@@ -61,6 +61,8 @@ import $http from '@/js/http.js'
 import { phoneChar } from '@/utils/vatildator.js'
 // 登录校验逻辑
 import { getLogin } from '@/api/login.js'
+// token 存储引入
+import { setToken } from '@/utils/token.js'
 
 export default {
   // 写入组件可以便于调试
@@ -117,7 +119,7 @@ export default {
           }).then(res => {
             if (res.data.code == 200) {
               this.$message.success("欢迎你")
-              window.localStorage.setItem('heimamm',res.data.data.token);
+              setToken(res.data.data.token);
               this.$router.push('/index');
             } else {
               this.$message.error(res.data.message);
