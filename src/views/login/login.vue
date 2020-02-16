@@ -59,6 +59,8 @@
 import vRegister from './components/register'
 import $http from '@/js/http.js'
 import { phoneChar } from '@/utils/vatildator.js'
+// 登录校验逻辑
+import { getLogin } from '@/api/login.js'
 
 export default {
   // 写入组件可以便于调试
@@ -89,7 +91,7 @@ export default {
           { min: 4, max: 4, message: "验证码的长度为4位", trigger: "blur" }
         ]
       },
-      captcha: $http.getCaptcha.url
+      captcha: $http.getCaptchaLogin.url
     };
   },
   methods: {
@@ -102,7 +104,25 @@ export default {
       // validate 这个方法是 Element-ui 的表单的方法
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$message.success('验证成功');
+          // this.$message.success('验证成功');
+          // 判断是否勾选协议
+          if (!this.loginFrom.isChecked) {
+            return this.$message.warning("请勾选协议按钮");
+          }
+          // 进入登录逻辑
+          getLogin({
+            phone: this.loginFrom.phoneNum,
+            password: this.loginFrom.userProw,
+            code:this.loginFrom.verify
+          }).then(res => {
+            if (res.data.code == 200) {
+              this.$message.success("欢迎你")
+              window.localStorage.setItem('heimamm',res.data.data.token);
+              this.$router.push('/index');
+            } else {
+              this.$message.error(res.data.message);
+            }
+          })
         } else {
           this.$message.error('验证失败');
           return false;
@@ -115,8 +135,10 @@ export default {
     },
     // 切换验证码
     changeCaptcha() {
+      // 避免时间戳累加
+      let captcha = $http.getCaptchaLogin.url;
       // 根据时间戳
-      this.captcha = this.captcha + Date.now();
+      this.captcha = captcha + Date.now();
     }
   }
 };

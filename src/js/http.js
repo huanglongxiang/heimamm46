@@ -1,7 +1,11 @@
 const LIST_CONTENT = {
-    // 获取验证码
+    // 获取验证码 直接获取
     getCaptcha: {
         url: process.env.VUE_APP_URL+'/captcha?type=sendsms&t=',
+        method: 'get'
+    },
+    getCaptchaLogin: {
+        url: process.env.VUE_APP_URL+'/captcha?type=login&t=',
         method: 'get'
     },
     // 短信验证
@@ -17,6 +21,11 @@ const LIST_CONTENT = {
     // 注册
     setRegisterUser: {
         url: process.env.VUE_APP_URL + '/register',
+        method: 'post'
+    },
+    // 登录
+    getLogin: {
+        url: '/login',
         method: 'post'
     }
 }
