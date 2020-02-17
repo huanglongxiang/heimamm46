@@ -15,7 +15,33 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">数据概览</span>
+          </el-menu-item>
+          <el-menu-item index="2">
+            <i class="el-icon-user"></i>
+            <span slot="title">用户列表</span>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <i class="el-icon-edit-outline"></i>
+            <span slot="title">题库列表</span>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <i class="el-icon-office-building"></i>
+            <span slot="title">企业列表</span>
+          </el-menu-item>
+          <el-menu-item index="5">
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">学科列表</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
       <el-main>Main</el-main>
     </el-container>
   </el-container>
@@ -46,22 +72,22 @@ export default {
     // 注销逻辑
     exitLogin() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-      })
-      .then(() => {
-          this.$message({
-            type: 'success',message: '退出成功!'});
-          exitInfo().then(res => {
-              window.console.log(res);
-            if (res.data.code === 200) {
-              removeToken();
-              this.$router.push("/login");
-            }
-          });
-        }
-      );
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$message({
+          type: "success",
+          message: "退出成功!"
+        });
+        exitInfo().then(res => {
+          window.console.log(res);
+          if (res.data.code === 200) {
+            removeToken();
+            this.$router.push("/login");
+          }
+        });
+      });
     }
   }
 };
@@ -120,7 +146,7 @@ export default {
   }
 
   .el-aside {
-    background-color: #d3dce6;
+    background-color: #ffffff;
     color: #333;
     text-align: center;
     line-height: 200px;
