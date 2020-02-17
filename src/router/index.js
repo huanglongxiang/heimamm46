@@ -15,6 +15,11 @@ import user from '@/views/index/user/user'
 import question from '@/views/index/question/question'
 import subject from '@/views/index/subject/subject'
 import enterprise from '@/views/index/enterprise/enterprise'
+
+// 导入进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 创建路由对象
 const router = new VueRouter({
     routes:[
@@ -50,5 +55,19 @@ const router = new VueRouter({
         }
     ]
 })
+
+// 导航守卫 beforeEach 进入之前
+router.beforeEach((to, from, next) => {
+    // 开启进度条
+    NProgress.start();
+    next();
+})
+
+// 导航守卫
+router.afterEach(() => {
+    // 关闭进度条
+    NProgress.done();
+})
+
 // 暴漏出去
 export default router
