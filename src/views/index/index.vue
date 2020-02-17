@@ -2,7 +2,7 @@
   <el-container class="userIndex">
     <el-header>
       <div class="left">
-        <span class="icon el-icon-s-fold"></span>
+        <span class="icon el-icon-s-fold" @click="isCollapse = !isCollapse"></span>
         <img class="l-logo" src="@/assets/index_logo.png" alt />
         <span class="l-title">黑马面面</span>
       </div>
@@ -15,11 +15,8 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px">
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-        >
+      <el-aside width="auto">
+        <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse">
           <el-menu-item index="1">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
@@ -54,7 +51,8 @@ export default {
   name: "index",
   data() {
     return {
-      userlogin: {}
+      userlogin: {},
+      isCollapse: false
     };
   },
   created() {
@@ -150,6 +148,10 @@ export default {
     color: #333;
     text-align: center;
     line-height: 200px;
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+      width: 200px;
+      min-height: 400px;
+    }
   }
 
   .el-main {
