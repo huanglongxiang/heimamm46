@@ -22,43 +22,55 @@
 </template>
 
 <script>
-import { getInfo,exitInfo } from '@/api/index.js'
-import { removeToken } from '@/utils/token'
+import { getInfo, exitInfo } from "@/api/index.js";
+import { removeToken } from "@/utils/token";
 export default {
-    name: 'index',
-    data() {
-        return {
-            userlogin: {}
-        }
-    },
-    created() {
-        // 读取存储的 token
-        getInfo().then(res => {
-            window.console.log(res);
+  name: "index",
+  data() {
+    return {
+      userlogin: {}
+    };
+  },
+  created() {
+    // 读取存储的 token
+    getInfo().then(res => {
+      window.console.log(res);
+      if (res.data.code === 200) {
+        this.userlogin = res.data.data;
+        this.userlogin.avatar =
+          process.env.VUE_APP_URL + "/" + this.userlogin.avatar;
+      }
+    });
+  },
+  methods: {
+    // 注销逻辑
+    exitLogin() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+      })
+      .then(() => {
+          this.$message({
+            type: 'success',message: '退出成功!'});
+          exitInfo().then(res => {
+              window.console.log(res);
             if (res.data.code === 200) {
-                this.userlogin = res.data.data;
-                this.userlogin.avatar = process.env.VUE_APP_URL +'/'+  this.userlogin.avatar
+              removeToken();
+              this.$router.push("/login");
             }
-        })
-    },
-    methods: {
-        // 注销逻辑
-        exitLogin() {
-            exitInfo().then(res => {
-                window.console.log(res);
-                if(res.code === 200) {
-                    removeToken();
-                }                
-            })
+          });
         }
+      );
     }
+  }
 };
 </script>
 
 <style lang="less" scoped>
 .userIndex {
   height: 100%;
-  font-family:Microsoft YaHei;
+  font-family: Microsoft YaHei;
   .el-header {
     background-color: #fff;
     text-align: center;
@@ -86,25 +98,24 @@ export default {
       }
     }
     .right {
-        display: flex;
-        align-items: center;
-        .r-userIcon{
-            width:43px;
-            height:43px;
-            overflow: hidden;
-            border-radius: 50%;
-            img {
-                width: 100%;
-                height: 100%;
-
-            }
+      display: flex;
+      align-items: center;
+      .r-userIcon {
+        width: 43px;
+        height: 43px;
+        overflow: hidden;
+        border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
         }
-        .UserName{
-            font-size:14px;
-            color:rgba(99,99,99,1);
-            margin-left: 9px;
-            margin-right: 38px;
-        }
+      }
+      .UserName {
+        font-size: 14px;
+        color: rgba(99, 99, 99, 1);
+        margin-left: 9px;
+        margin-right: 38px;
+      }
     }
   }
 
