@@ -48,7 +48,7 @@
 
 <script>
 import { getInfo, exitInfo } from "@/api/index.js";
-import { removeToken } from "@/utils/token";
+import { removeToken,getToken } from "@/utils/token";
 
 export default {
   name: "index",
@@ -58,6 +58,13 @@ export default {
       isCollapse: false
     };
   },
+  beforeCreate() {
+      window.console.log(getToken())
+      if (getToken()==null) {
+          this.$message.error("请先登录哦~");
+          this.$router.push("/login");
+      }
+  },
   created() {
     // 读取存储的 token
     getInfo().then(res => {
@@ -66,28 +73,26 @@ export default {
         this.userlogin.avatar = process.env.VUE_APP_URL + "/" + this.userlogin.avatar;
       }
     });
-    window.console.log(this.$route.path)
   },
   methods: {
     // 注销逻辑
     exitLogin() {
         // 提示框
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("是否退出登录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
+        this.$router.push("/login");
         this.$message({
           type: "success",
           message: "退出成功!"
         });
         // 接口调用
         exitInfo().then(res => {
-          window.console.log(res);
-          if (res.data.code === 200) {
-            removeToken();
-            this.$router.push("/login");
-          }
+            if (res.data.code === 200) {
+                removeToken();
+            }
         });
       });
     }
