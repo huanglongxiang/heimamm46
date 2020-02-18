@@ -21,7 +21,10 @@
         <el-form-item>
           <el-button type="primary">查询</el-button>
           <el-button>清除</el-button>
-          <el-button icon="el-icon-plus" type="primary">新增学科</el-button>
+          <el-button 
+          icon="el-icon-plus" 
+          type="primary"
+          @click="$refs.subAdd.dialogFormVisible=true">新增学科</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -66,14 +69,20 @@
         ></el-pagination>
       </template>
     </el-card>
+    <!-- 新增对话框 -->
+    <subjectAdd ref="subAdd"></subjectAdd>
   </div>
 </template>
 
 <script>
 import { getAPI } from '@/js/getData'
+import subjectAdd from './components/subjectAdd'
 
 export default {
   name: "subject",
+  components: {
+    subjectAdd
+  },
   data() {
     return {
       /* 头数据 */
@@ -98,7 +107,6 @@ export default {
     // 状态切换
     async handleNoAllow(index, row) {
       let _data = await getAPI('statusSubject',{id: row.id});
-      window.console.log(_data)
       if (_data.code == 200) {
         this.$message.success('修改成功');
         this.reading();
