@@ -16,7 +16,7 @@ import question from '@/views/index/question/question'
 import subject from '@/views/index/subject/subject'
 import enterprise from '@/views/index/enterprise/enterprise'
 
-// 导入进度条
+// 导入进度条 插件
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -24,6 +24,9 @@ import 'nprogress/nprogress.css'
 import { removeToken,getToken } from "@/utils/token";
 import { getInfo } from "@/api/index.js";
 import { Message } from 'element-ui'
+
+// 导入仓库
+import store from '@/store/store.js'
 
 // 创建路由对象
 const router = new VueRouter({
@@ -108,7 +111,13 @@ router.beforeEach((to, from, next) => {
                     next('/login');
                     NProgress.done();
                     removeToken();
-                } else if(res.data.code === 200) {
+                } else if(res.data.code === 200) {                   
+                    // 成功后，对接口数据进行处理
+                    const userlogin = {
+                        username: res.data.data.username,
+                        avatar: process.env.VUE_APP_URL +'/'+ res.data.data.avatar
+                    };
+                    store.commit('changeUserLogin', userlogin)
                     next();
                 }
             })

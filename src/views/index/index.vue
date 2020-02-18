@@ -8,9 +8,9 @@
       </div>
       <div class="right">
         <span class="r-userIcon">
-          <img :src="userlogin.avatar" alt />
+          <img :src="$store.state.userlogin.avatar" alt />
         </span>
-        <span class="UserName">你好，{{userlogin.username}}</span>
+        <span class="UserName">你好，{{$store.state.userlogin.username}}</span>
         <el-button type="primary" @click="exitLogin">退出</el-button>
       </div>
     </el-header>
@@ -47,24 +47,17 @@
 </template>
 
 <script>
-import { getInfo,exitInfo } from "@/api/index.js";
+import { exitInfo } from "@/api/index.js";
 import { removeToken } from "@/utils/token";
 
 export default {
   name: "index",
   data() {
     return {
-      userlogin: {},
       isCollapse: false
     };
   },
   created() {
-    // 读取存储的 token
-    getInfo().then(res => {
-        // 判断 token 对错
-        this.userlogin = res.data.data;
-        this.userlogin.avatar = process.env.VUE_APP_URL + "/" + this.userlogin.avatar;
-    });
   },
   methods: {
     // 注销逻辑
@@ -84,6 +77,8 @@ export default {
         exitInfo().then(res => {
             if (res.data.code === 200) {
                 removeToken();
+                // 清空仓库
+                this.$store.commit('changeUserLogin',{});
             }
         });
       });
