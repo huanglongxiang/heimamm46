@@ -29,7 +29,6 @@ instents.interceptors.request.use(res => {
 })
 // 拦截器响应 响应
 instents.interceptors.response.use(res => {
-    window.console.log(res);
     load.close();
     return res.data;
 }, () => {

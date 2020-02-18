@@ -82,40 +82,7 @@ export default {
         region: ""
       },
       /* 表格内容数据 */
-      tableData: [
-        {
-          subId: "qd001",
-          subName: "前端与移动开发",
-          forShort: "前端",
-          author: "刘洋呀",
-          createData: "2016-05-01",
-          state: "启用"
-        },
-        {
-          subId: "qd001",
-          subName: "前端与移动开发",
-          forShort: "前端",
-          author: "刘洋呀",
-          createData: "2016-05-01",
-          state: "启用"
-        },
-        {
-          subId: "qd001",
-          subName: "前端与移动开发",
-          forShort: "前端",
-          author: "刘洋呀",
-          createData: "2016-05-01",
-          state: "启用"
-        },
-        {
-          subId: "qd001",
-          subName: "前端与移动开发",
-          forShort: "前端",
-          author: "刘洋呀",
-          createData: "2016-05-01",
-          state: "启用"
-        }
-      ],
+      tableData: [],
       /* 分页数据 */
       currentPage: 4
     };
@@ -128,8 +95,14 @@ export default {
     handleEdit(index, row) {
       window.console.log(index, row);
     },
-    handleNoAllow(index, row) {
-      window.console.log(index, row);
+    // 状态切换
+    async handleNoAllow(index, row) {
+      let _data = await getAPI('statusSubject',{id: row.id});
+      window.console.log(_data)
+      if (_data.code == 200) {
+        this.$message.success('修改成功');
+        this.reading();
+      }
     },
     handleDelete(index, row) {
       window.console.log(index, row);
