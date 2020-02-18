@@ -39,7 +39,7 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main>
+      <el-main class="lh0">
           <router-view></router-view>
       </el-main>
     </el-container>
@@ -153,8 +153,8 @@ export default {
   .el-main {
     background-color: #e9eef3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    text-align: left;
+    line-height: 0px;
   }
 }
 </style>
