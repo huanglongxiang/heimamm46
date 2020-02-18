@@ -6,20 +6,20 @@
   title="新增学科" 
   :visible.sync="dialogFormVisible">
     <el-form :model="form">
-      <el-form-item label="学科编号" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form-item label="学科编号" prop="rid" :label-width="formLabelWidth">
+        <el-input v-model="form.rid" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="学科名称" :label-width="formLabelWidth">
+      <el-form-item label="学科名称" prop="name" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="学科简称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.short_name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="学科简介" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.intro" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="学科备注" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.remark" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -36,7 +36,23 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        name: ""
+        rid: "",
+        name:"",
+        short_name:"",
+        intro:"",
+        remark:""
+      },
+      rules:{
+        rid:[{
+          required: true,
+          message:"学科编号不能为空",
+          trigger:"blur"
+        }],
+        name:[{
+          required: true,
+          message:"学科名称不能为空",
+          trigger:"blur"
+        }]
       },
       formLabelWidth: "120px"
     };

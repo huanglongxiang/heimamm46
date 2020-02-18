@@ -75,7 +75,6 @@
 </template>
 
 <script>
-import { getAPI } from '@/js/getData'
 import subjectAdd from './components/subjectAdd'
 
 export default {
@@ -106,7 +105,7 @@ export default {
     },
     // 状态切换
     async handleNoAllow(index, row) {
-      let _data = await getAPI('statusSubject',{id: row.id});
+      let _data = await this.$getAPI('statusSubject',{id: row.id});
       if (_data.code == 200) {
         this.$message.success('修改成功');
         this.reading();
@@ -124,7 +123,7 @@ export default {
     },
     /* 读取数据 */
     async reading(){
-      let _data = await getAPI("getSubjectList");
+      let _data = await this.$getAPI("getSubjectList");
       this.tableData = _data.data.items;
     }
   }

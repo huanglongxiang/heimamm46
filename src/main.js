@@ -5,6 +5,7 @@ import router from './router/index.js'
 // 导入仓库
 import store from './store/store.js'
 // 接口调用导入
+import { getAPI } from '@/js/getData'
 
 // 导入element-io的样式
 import ElementUi from 'element-ui'
@@ -15,6 +16,8 @@ Vue.use(ElementUi)
 import './style/base.css'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$getAPI = getAPI
 
 new Vue({
   // 将路由挂载到Vue实例上
