@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import { getInfo, exitInfo } from "@/api/index.js";
-import { removeToken,getToken } from "@/utils/token";
+import { getInfo,exitInfo } from "@/api/index.js";
+import { removeToken } from "@/utils/token";
 
 export default {
   name: "index",
@@ -58,20 +58,12 @@ export default {
       isCollapse: false
     };
   },
-  beforeCreate() {
-      window.console.log(getToken())
-      if (getToken()==null) {
-          this.$message.error("请先登录哦~");
-          this.$router.push("/login");
-      }
-  },
   created() {
     // 读取存储的 token
     getInfo().then(res => {
-      if (res.data.code === 200) {
+        // 判断 token 对错
         this.userlogin = res.data.data;
         this.userlogin.avatar = process.env.VUE_APP_URL + "/" + this.userlogin.avatar;
-      }
     });
   },
   methods: {
