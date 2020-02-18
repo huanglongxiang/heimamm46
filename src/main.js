@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router/index.js'
 // 导入仓库
 import store from './store/store.js'
+// 接口调用导入
 
 // 导入element-io的样式
 import ElementUi from 'element-ui'

@@ -1,5 +1,6 @@
 <template>
   <div class="subject-content">
+    <!-- 头部搜索 -->
     <el-card class="box-card">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="学科编号">
@@ -18,25 +19,133 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
-          <el-button @click="onSubmit">清除</el-button>
-          <el-button icon="el-icon-plus" type="primary" @click="onSubmit">新增学科</el-button>
+          <el-button type="primary">查询</el-button>
+          <el-button>清除</el-button>
+          <el-button icon="el-icon-plus" type="primary">新增学科</el-button>
         </el-form-item>
       </el-form>
+    </el-card>
+    <!-- 表格 -->
+    <el-card class="bottom-card">
+      <template>
+        <!-- 表格内容 -->
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column type="index" width="50" label="序号"></el-table-column>
+          <el-table-column prop="rid" label="学科编号"></el-table-column>
+          <el-table-column prop="name" label="学科名称"></el-table-column>
+          <el-table-column prop="short_name" label="简称"></el-table-column>
+          <el-table-column prop="intro" label="创建者"></el-table-column>
+          <el-table-column prop="create_time" label="创建日期"></el-table-column>
+          <el-table-column prop="status" label="状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status == 1">启用</span>
+              <span v-else style="color:red">禁用</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" type="text" @click="handleNoAllow(scope.$index, scope.row)">
+                  {{ scope.row.status ===1?'禁用':'启用' }}
+              </el-button>
+              <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页组件 -->
+        <el-pagination
+          class="pageLocation"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[100, 200, 300, 400]"
+          :page-size="100"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400"
+        ></el-pagination>
+      </template>
     </el-card>
   </div>
 </template>
 
 <script>
+import { getAPI } from '@/js/getData'
+
 export default {
   name: "subject",
   data() {
     return {
+      /* 头数据 */
       formInline: {
         user: "",
         region: ""
-      }
+      },
+      /* 表格内容数据 */
+      tableData: [
+        {
+          subId: "qd001",
+          subName: "前端与移动开发",
+          forShort: "前端",
+          author: "刘洋呀",
+          createData: "2016-05-01",
+          state: "启用"
+        },
+        {
+          subId: "qd001",
+          subName: "前端与移动开发",
+          forShort: "前端",
+          author: "刘洋呀",
+          createData: "2016-05-01",
+          state: "启用"
+        },
+        {
+          subId: "qd001",
+          subName: "前端与移动开发",
+          forShort: "前端",
+          author: "刘洋呀",
+          createData: "2016-05-01",
+          state: "启用"
+        },
+        {
+          subId: "qd001",
+          subName: "前端与移动开发",
+          forShort: "前端",
+          author: "刘洋呀",
+          createData: "2016-05-01",
+          state: "启用"
+        }
+      ],
+      /* 分页数据 */
+      currentPage: 4
     };
+  },
+   created() {
+    this.reading();
+  },
+  methods: {
+    /* 数据操作方法 */
+    handleEdit(index, row) {
+      window.console.log(index, row);
+    },
+    handleNoAllow(index, row) {
+      window.console.log(index, row);
+    },
+    handleDelete(index, row) {
+      window.console.log(index, row);
+    },
+    /* 分页方法 */
+    handleSizeChange(val) {
+      window.console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      window.console.log(`当前页: ${val}`);
+    },
+    /* 读取数据 */
+    async reading(){
+      let _data = await getAPI("getSubjectList");
+      this.tableData = _data.data.items;
+    }
   }
 };
 </script>
@@ -45,8 +154,16 @@ export default {
 .subject-content {
   .box-card {
     height: 103px;
-    .subjectID, .subjectAuthor{
+    .subjectID,
+    .subjectAuthor {
       width: 100px;
+    }
+  }
+  .bottom-card {
+    margin-top: 19px;
+    .pageLocation{
+      margin-top: 30px;
+      text-align: center
     }
   }
 }

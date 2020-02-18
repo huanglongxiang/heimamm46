@@ -37,6 +37,31 @@ const LIST_CONTENT = {
     getLogout: {
         url: '/logout',
         method: 'get'
+    },
+    // 学科列表
+    getSubjectList: {
+        url: '/subject/list',
+        method: 'get'
+    },
+    // 学科添加
+    addSubject: {
+        url: '/subject/add',
+        method: 'post'
+    },
+    // 学科删除
+    removeSubject: {
+        url: '/subject/remove',
+        method: 'post'
+    },
+    // 学科编辑
+    editSubject: {
+        url: '/subject/edit',
+        method: 'post'
+    },
+    // 学科状态
+    statusSubject: {
+        url: '/subject/status',
+        method: 'post'
     }
 }
 

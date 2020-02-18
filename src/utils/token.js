@@ -2,7 +2,7 @@ const TOKENKEY = "heimamm";
 export function setToken (token) {
     window.localStorage.setItem(TOKENKEY, token)
 }
-export function getToken(){
+export function getToken () {
     return window.localStorage.getItem(TOKENKEY);
 }
 export function removeToken() {
