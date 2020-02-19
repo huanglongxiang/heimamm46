@@ -1,9 +1,9 @@
 <template>
   <el-dialog
     center
-    class="subjectAdd-content"
+    class="subjectEdit-content"
     width="600px"
-    title="新增学科"
+    title="修改学科"
     :visible.sync="dialogFormVisible"
   >
     <el-form :model="form" :rules="rules" ref="subjectForm">
@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  name: "subjectAdd",
+  name: "subjectEdit",
   data() {
     return {
       dialogFormVisible: false,
@@ -66,13 +66,13 @@ export default {
     addSubject(subjectForm) {
       this.$refs[subjectForm].validate(res => {
         if (res) {
-          this.$getAPI("addSubject", this.form).then(data => {
+          this.$getAPI("editSubject", this.form).then(data => {
             if (data.code == 200) {
-              this.$message.success('添加成功');
-              this.$emit('refSubject');
+              this.$message.success('修改成功');
               this.dialogFormVisible = false;
-              // 刷新数据
+              // 清空表单数据
               this.$refs[subjectForm].resetFields();
+              this.$emit('refSubject')
             }
           });
         } else {
@@ -85,8 +85,8 @@ export default {
 };
 </script>
 
-<style lang="less">
-.subjectAdd-content {
+<style lang="less" scoped>
+.subjectEdit-content {
   .el-dialog__header {
     background: linear-gradient(to right, #01c5fb, #1197f9);
     .el-dialog__title {

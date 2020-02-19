@@ -71,17 +71,21 @@
       </template>
     </el-card>
     <!-- 新增对话框 -->
-    <subjectAdd ref="subAdd" @addSubject="addSubject"></subjectAdd>
+    <subjectAdd ref="subAdd" @refSubject="refSubject"></subjectAdd>
+    <!-- 编辑对话框 -->
+    <subjectEdit ref="subEdit" @refSubject="refSubject"></subjectEdit>
   </div>
 </template>
 
 <script>
 import subjectAdd from './components/subjectAdd'
+import subjectEdit from './components/subjectEdit'
 
 export default {
   name: "subject",
   components: {
-    subjectAdd
+    subjectAdd,
+    subjectEdit
   },
   data() {
     return {
@@ -119,6 +123,8 @@ export default {
     /* 数据操作方法 */
     handleEdit(index, row) {
       window.console.log(index, row);
+      this.$refs.subEdit.dialogFormVisible = true;
+      this.$refs.subEdit.form = JSON.parse(JSON.stringify(row));
     },
     // 状态切换
     async handleNoAllow(index, row) {
@@ -153,7 +159,7 @@ export default {
       });
     },
     // 刷新数据
-    addSubject(){
+    refSubject(){
       this.reading();
     }
   }
