@@ -3,23 +3,23 @@
     <!-- 头部搜索 -->
     <el-card class="box-card">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="学科编号">
-          <el-input v-model="formInline.user" class="subjectID"></el-input>
+        <el-form-item  label="学科编号">
+          <el-input v-model="formInline.rid" class="subjectID"></el-input>
         </el-form-item>
         <el-form-item label="学科名称">
-          <el-input v-model="formInline.user"></el-input>
+          <el-input v-model="formInline.name"></el-input>
         </el-form-item>
         <el-form-item label="创建者">
-          <el-input v-model="formInline.user" class="subjectAuthor"></el-input>
+          <el-input v-model="formInline.username" class="subjectAuthor"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="formInline.region" placeholder="请选择状态">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select v-model="formInline.status" placeholder="请选择状态">
+            <el-option label="启用" value="1"></el-option>
+            <el-option label="禁用" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="querySubject">查询</el-button>
           <el-button>清除</el-button>
           <el-button 
           icon="el-icon-plus" 
@@ -86,8 +86,10 @@ export default {
     return {
       /* 头数据 */
       formInline: {
-        user: "",
-        region: ""
+        name: "",
+        rid: "",
+        username: "",
+        status: ""
       },
       /* 表格内容数据 */
       tableData: [],
@@ -102,6 +104,11 @@ export default {
     this.reading();
   },
   methods: {
+    // 数据筛选
+    querySubject() {
+      this.index = 1;
+      this.reading();
+    },
     /* 数据操作方法 */
     handleEdit(index, row) {
       window.console.log(index, row);
@@ -130,12 +137,12 @@ export default {
     reading(){
       this.$getAPI("getSubjectList",{
         limit:this.page,
-        page:this.index
+        page:this.index,
+        ...this.formInline
       }).then(res => {
         this.tableData = res.data.items;
         // 设置分页
         this.total = res.data.pagination.total
-        window.console.log(res.data);
       });
     },
     // 刷新数据
