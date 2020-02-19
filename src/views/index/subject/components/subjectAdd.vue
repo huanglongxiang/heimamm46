@@ -64,22 +64,20 @@ export default {
   },
   methods: {
     addSubject(subjectForm) {
-      this.dialogFormVisible = false;
       this.$refs[subjectForm].validate(res => {
         if (res) {
-          this.$getAPI("addSubject", {
-            rid: this.form.rid,
-            name: this.form.name,
-            short_name: this.form.short_name,
-            intro: this.form.intro,
-            remark: this.form.remark,
-            status: 1
-          }).then(data => {
+          this.$getAPI("addSubject", this.form).then(data => {
             if (data.code == 200) {
               this.$message.success('添加成功');
-              this.$emit('addSubject')
+              this.$emit('addSubject');
+              this.dialogFormVisible = false;
+              // 刷新数据
+              this.$refs[subjectForm].resetFields();
             }
           });
+        } else {
+          this.$message.error("数据验证失败，请检查");
+          return false;
         }
       });
     }

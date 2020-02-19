@@ -37,7 +37,7 @@
           <el-table-column prop="rid" label="学科编号"></el-table-column>
           <el-table-column prop="name" label="学科名称"></el-table-column>
           <el-table-column prop="short_name" label="简称"></el-table-column>
-          <el-table-column prop="intro" label="创建者"></el-table-column>
+          <el-table-column prop="username" label="创建者"></el-table-column>
           <el-table-column prop="create_time" label="创建日期"></el-table-column>
           <el-table-column prop="status" label="状态">
             <template slot-scope="scope">
@@ -61,11 +61,11 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[5, 10, 20, 30]"
+          :page-size="page"
           background
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
         ></el-pagination>
       </template>
     </el-card>
@@ -92,7 +92,10 @@ export default {
       /* 表格内容数据 */
       tableData: [],
       /* 分页数据 */
-      currentPage: 4
+      currentPage: 1,
+      total: 400,
+      page:5,
+      index:1
     };
   },
    created() {
@@ -120,11 +123,20 @@ export default {
     },
     handleCurrentChange(val) {
       window.console.log(`当前页: ${val}`);
+      this.index = val;
+      this.reading();
     },
     /* 读取数据 */
-    async reading(){
-      let _data = await this.$getAPI("getSubjectList");
-      this.tableData = _data.data.items;
+    reading(){
+      this.$getAPI("getSubjectList",{
+        limit:this.page,
+        page:this.index
+      }).then(res => {
+        this.tableData = res.data.items;
+        // 设置分页
+        this.total = res.data.pagination.total
+        window.console.log(res.data);
+      });
     },
     // 刷新数据
     addSubject(){
