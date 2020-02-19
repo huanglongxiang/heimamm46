@@ -2,25 +2,26 @@
   <div class="subject-content">
     <!-- 头部搜索 -->
     <el-card class="box-card">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item  label="学科编号">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline" ref="selectForm">
+        <el-form-item  label="学科编号" prop="rid">
           <el-input v-model="formInline.rid" class="subjectID"></el-input>
         </el-form-item>
-        <el-form-item label="学科名称">
+        <el-form-item label="学科名称" prop="name">
           <el-input v-model="formInline.name"></el-input>
         </el-form-item>
-        <el-form-item label="创建者">
+        <el-form-item label="创建者" prop="username">
           <el-input v-model="formInline.username" class="subjectAuthor"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-select v-model="formInline.status" placeholder="请选择状态">
+            <el-option label="所有" value=""></el-option>
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="querySubject">查询</el-button>
-          <el-button>清除</el-button>
+          <el-button @click="clearData">清除</el-button>
           <el-button 
           icon="el-icon-plus" 
           type="primary"
@@ -61,7 +62,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 30]"
+          :page-sizes="[2, 5, 10, 12]"
           :page-size="page"
           background
           layout="total, sizes, prev, pager, next, jumper"
@@ -104,6 +105,12 @@ export default {
     this.reading();
   },
   methods: {
+    // 数据清空
+    clearData(){
+      this.$refs.selectForm.resetFields();
+      this.index = 1;
+      this.reading();
+    },
     // 数据筛选
     querySubject() {
       this.index = 1;
@@ -126,10 +133,10 @@ export default {
     },
     /* 分页方法 */
     handleSizeChange(val) {
-      window.console.log(`每页 ${val} 条`);
+      this.page = val;
+      this.reading();
     },
     handleCurrentChange(val) {
-      window.console.log(`当前页: ${val}`);
       this.index = val;
       this.reading();
     },
