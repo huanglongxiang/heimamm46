@@ -70,7 +70,7 @@
       </template>
     </el-card>
     <!-- 新增对话框 -->
-    <subjectAdd ref="subAdd"></subjectAdd>
+    <subjectAdd ref="subAdd" @addSubject="addSubject"></subjectAdd>
   </div>
 </template>
 
@@ -125,6 +125,10 @@ export default {
     async reading(){
       let _data = await this.$getAPI("getSubjectList");
       this.tableData = _data.data.items;
+    },
+    // 刷新数据
+    addSubject(){
+      this.reading();
     }
   }
 };
