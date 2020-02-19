@@ -3,7 +3,7 @@
     <!-- 头部搜索 -->
     <el-card class="box-card">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" ref="selectForm">
-        <el-form-item  label="学科编号" prop="rid">
+        <el-form-item label="学科编号" prop="rid">
           <el-input v-model="formInline.rid" class="subjectID"></el-input>
         </el-form-item>
         <el-form-item label="学科名称" prop="name">
@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="formInline.status" placeholder="请选择状态">
-            <el-option label="所有" value=""></el-option>
+            <el-option label="所有" value></el-option>
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
@@ -22,10 +22,11 @@
         <el-form-item>
           <el-button type="primary" @click="querySubject">查询</el-button>
           <el-button @click="clearData">清除</el-button>
-          <el-button 
-          icon="el-icon-plus" 
-          type="primary"
-          @click="$refs.subAdd.dialogFormVisible=true">新增学科</el-button>
+          <el-button
+            icon="el-icon-plus"
+            type="primary"
+            @click="$refs.subAdd.dialogFormVisible=true"
+          >新增学科</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -49,9 +50,11 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="text" @click="handleNoAllow(scope.$index, scope.row)">
-                  {{ scope.row.status ===1?'禁用':'启用' }}
-              </el-button>
+              <el-button
+                size="mini"
+                type="text"
+                @click="handleNoAllow(scope.$index, scope.row)"
+              >{{ scope.row.status ===1?'禁用':'启用' }}</el-button>
               <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -78,8 +81,8 @@
 </template>
 
 <script>
-import subjectAdd from './components/subjectAdd'
-import subjectEdit from './components/subjectEdit'
+import subjectAdd from "./components/subjectAdd";
+import subjectEdit from "./components/subjectEdit";
 
 export default {
   name: "subject",
@@ -101,16 +104,16 @@ export default {
       /* 分页数据 */
       currentPage: 1,
       total: 400,
-      page:5,
-      index:1
+      page: 5,
+      index: 1
     };
   },
-   created() {
+  created() {
     this.reading();
   },
   methods: {
     // 数据清空
-    clearData(){
+    clearData() {
       this.$refs.selectForm.resetFields();
       this.index = 1;
       this.reading();
@@ -121,21 +124,37 @@ export default {
       this.reading();
     },
     /* 数据操作方法 */
+    // 编辑
     handleEdit(index, row) {
-      window.console.log(index, row);
       this.$refs.subEdit.dialogFormVisible = true;
       this.$refs.subEdit.form = JSON.parse(JSON.stringify(row));
     },
     // 状态切换
     async handleNoAllow(index, row) {
-      let _data = await this.$getAPI('statusSubject',{id: row.id});
+      let _data = await this.$getAPI("statusSubject", { id: row.id });
       if (_data.code == 200) {
-        this.$message.success('修改成功');
+        this.$message.success("修改成功");
         this.reading();
       }
     },
+    // 删除
     handleDelete(index, row) {
       window.console.log(index, row);
+      // 删除提示
+      this.$confirm("此操作将永久删除该学科, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+          // 调用接口
+          this.$getAPI('removeSubject', {id:row.id}).then( res => {
+            if (res.code == 200) {
+              this.$message.success("删除成功!");
+              this.reading();
+            }
+          })
+        }).catch(() => {
+        });
     },
     /* 分页方法 */
     handleSizeChange(val) {
@@ -147,19 +166,19 @@ export default {
       this.reading();
     },
     /* 读取数据 */
-    reading(){
-      this.$getAPI("getSubjectList",{
-        limit:this.page,
-        page:this.index,
+    reading() {
+      this.$getAPI("getSubjectList", {
+        limit: this.page,
+        page: this.index,
         ...this.formInline
       }).then(res => {
         this.tableData = res.data.items;
         // 设置分页
-        this.total = res.data.pagination.total
+        this.total = res.data.pagination.total;
       });
     },
     // 刷新数据
-    refSubject(){
+    refSubject() {
       this.reading();
     }
   }
@@ -177,9 +196,9 @@ export default {
   }
   .bottom-card {
     margin-top: 19px;
-    .pageLocation{
+    .pageLocation {
       margin-top: 30px;
-      text-align: center
+      text-align: center;
     }
   }
 }
