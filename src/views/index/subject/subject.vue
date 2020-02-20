@@ -40,7 +40,11 @@
           <el-table-column prop="name" label="学科名称"></el-table-column>
           <el-table-column prop="short_name" label="简称"></el-table-column>
           <el-table-column prop="username" label="创建者"></el-table-column>
-          <el-table-column prop="create_time" label="创建日期"></el-table-column>
+          <el-table-column prop="create_time" label="创建日期">
+            <template slot-scope="scope">
+              {{scope.row.create_time | filterTime}}
+            </template>
+          </el-table-column>
           <el-table-column prop="status" label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status == 1">启用</span>
@@ -127,7 +131,10 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.$refs.subEdit.dialogFormVisible = true;
-      this.$refs.subEdit.form = JSON.parse(JSON.stringify(row));
+      // 保存编辑状态
+      if (row.id != this.$refs.subEdit.form.id) {
+        this.$refs.subEdit.form = JSON.parse(JSON.stringify(row));
+      }
     },
     // 状态切换
     async handleNoAllow(index, row) {
@@ -150,6 +157,13 @@ export default {
           this.$getAPI('removeSubject', {id:row.id}).then( res => {
             if (res.code == 200) {
               this.$message.success("删除成功!");
+              // 增加最后一页判断
+              if (this.tableData.length == 1) {
+                this.index--;
+                if (this.index <= 0) {
+                  this.index == 1;
+                }
+              }
               this.reading();
             }
           })

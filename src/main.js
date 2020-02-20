@@ -13,7 +13,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUi)
 
 // 导入全局样式
-import './style/base.css'
+import './style/base.css' //基础样式
+import './filter/filter.js'  // 过滤器
 
 Vue.config.productionTip = false
 
