@@ -62,6 +62,31 @@ const LIST_CONTENT = {
     statusSubject: {
         url: '/subject/status',
         method: 'post'
+    },
+    // 企业列表
+    enterpriseList: {
+        url: '/enterprise/list',
+        method: 'get'
+    },
+    // 企业编辑
+    enterpriseEdit: {
+        url: '/enterprise/edit',
+        method: 'post'
+    },
+    // 企业删除
+    enterpriseRemove: {
+        url: '/enterprise/remove',
+        method: 'post'
+    },
+    // 企业状态设置
+    enterpriseStatus: {
+        url: '/enterprise/status',
+        method: 'post'
+    },
+    // 企业添加
+    enterpriseAdd: {
+        url: '/enterprise/add',
+        method: 'post'
     }
 }
 
