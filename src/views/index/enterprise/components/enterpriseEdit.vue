@@ -78,22 +78,36 @@ export default {
     };
   },
   methods: {
-    clearFrom(){
-        this.$refs.enterpris.resetFields();
+    show(editData) {
+      this.dialogFormVisible = true;
+      if (editData == undefined) {
+        this.$nextTick(() => {
+            this.isShowAddOrEnter = true;
+            delete this.form.id;
+            this.$refs.enterpris.resetFields();
+        })
+      } else {
+        this.$nextTick(() => {
+             this.isShowAddOrEnter = false;
+             this.form = editData;
+        })
+      }
     },
     editEnterprise(formName) {
-        // true 为新增  false为编辑
-        let url = '';
-        if (this.isShowAddOrEnter == true) {
-            url = 'enterpriseAdd'
-        } else {
-            url = 'enterpriseEdit'
-        }
+      // true 为新增  false为编辑
+      let url = "";
+      if (this.isShowAddOrEnter == true) {
+        url = "enterpriseAdd";
+      } else {
+        url = "enterpriseEdit";
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$getAPI(url, this.form).then(data => {
             if (data.code == 200) {
-              this.$message.success(`${this.isShowAddOrEnter == true ? '新增':'修改'}成功`);
+              this.$message.success(
+                `${this.isShowAddOrEnter == true ? "新增" : "修改"}成功`
+              );
               this.$emit("refEnterprise");
               this.dialogFormVisible = false;
               // 刷新数据

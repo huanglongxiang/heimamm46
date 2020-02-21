@@ -107,13 +107,7 @@ export default {
   methods: {
     // 新增企业
     addEnterprise() {
-      this.$refs.enterpriseEdit.isShowAddOrEnter = true;
-      this.$refs.enterpriseEdit.dialogFormVisible = true;
-      for (const key in this.$refs.enterpriseEdit.form) {
-        this.$refs.enterpriseEdit.form[key] = "";
-      }
-      // this.$refs.enterpriseEdit.form = {};
-      // this.$refs.enterpriseEdit.clearFrom();
+      this.$refs.enterpriseEdit.show();
     },
     // 清空表单
     clearFrom() {
@@ -155,12 +149,7 @@ export default {
     },
     // 编辑
     handleEdit(index, row) {
-      this.$refs.enterpriseEdit.dialogFormVisible = true;
-      this.$refs.enterpriseEdit.isShowAddOrEnter = false;
-      // 保存编辑状态
-      if (row.id != this.$refs.enterpriseEdit.form.id) {
-        this.$refs.enterpriseEdit.form = JSON.parse(JSON.stringify(row));
-      }
+      this.$refs.enterpriseEdit.show(JSON.parse(JSON.stringify(row)));
     },
     // 删除
     handleDelete(index, row) {

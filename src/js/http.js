@@ -87,7 +87,38 @@ const LIST_CONTENT = {
     enterpriseAdd: {
         url: '/enterprise/add',
         method: 'post'
-    }
+    },
+    /* 用户接口 */
+    // 用户列表
+    userList: {
+        url: '/user/list',
+        method: 'get'
+    },
+    // 用户编辑
+    userEdit: {
+        url: '/enterprise/edit',
+        method: 'post'
+    },
+    // 用户删除
+    userRemove: {
+        url: '/user/remove',
+        method: 'post'
+    },
+    // 用户状态设置
+    userStatus: {
+        url: '/user/status',
+        method: 'post'
+    },
+    // 后台用户添加
+    userAdd: {
+        url: '/user/add',
+        method: 'post'
+    },
+    // 获取token
+    getToken: {
+        url: '/token',
+        method: 'post'
+    },
 }
 
 export default LIST_CONTENT
