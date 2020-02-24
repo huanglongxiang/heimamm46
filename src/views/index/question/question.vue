@@ -2,9 +2,9 @@
   <el-card class="question-content">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="学科">
-        <el-select v-model="formInline.region" placeholder="请选择学科">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="formInline.subject" placeholder="请选择学科">
+          <el-option label="所有" value=""></el-option>
+          <el-option v-for="item in subjectList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="阶段">
@@ -14,9 +14,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="企业">
-        <el-select v-model="formInline.region" placeholder="请选择企业">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="formInline.enterprise" placeholder="请选择企业">
+          <el-option label="所有" value=""></el-option>
+            <el-option v-for="item in enterprise" :key="item.eid" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="题型">
@@ -63,11 +63,21 @@ export default {
   data() {
     return {
       formInline: {
-        user: "",
-        region: ""
+        subject: "",
+        enterprise: "",
       },
-      value1:""
+      value1:"",
+      subjectList:[],
+      enterprise:[],
     };
+  },
+  created() {
+    this.$getAPI('getSubjectList').then(res => {
+      this.subjectList =res.data.items;
+    })
+    this.$getAPI('enterpriseList').then(res => {
+      this.enterprise = res.data.items;
+    })
   },
   methods: {}
 };

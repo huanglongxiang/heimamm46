@@ -96,7 +96,7 @@ export default {
     editEnterprise(formName) {
       // true 为新增  false为编辑
       let url = "";
-      if (this.isShowAddOrEnter == false) {
+      if (this.isShowAddOrEnter == true) {
         url = "enterpriseAdd";
       } else {
         url = "enterpriseEdit";
