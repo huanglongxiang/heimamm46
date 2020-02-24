@@ -22,7 +22,7 @@ export default [
         meta: {
             title: '用户列表',
             rules: ['管理员'],
-            icon: 'el-icon.user',
+            icon: 'el-icon-user',
             fullPath: '/index/user'
         }
     },

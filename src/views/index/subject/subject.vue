@@ -25,6 +25,7 @@
           <el-button
             icon="el-icon-plus"
             type="primary"
+            v-if="['管理员','超级管理员','老师'].includes($store.state.role)"
             @click="$refs.subAdd.dialogFormVisible=true"
           >新增学科</el-button>
         </el-form-item>
@@ -51,7 +52,7 @@
               <span v-else style="color:red">禁用</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" v-if="['管理员','超级管理员'].includes($store.state.role)">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
