@@ -42,7 +42,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="日期">
-        <el-input v-model="formInline.user" placeholder="请选择日期"></el-input>
+        <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
       </el-form-item>
       <br />
       <el-form-item class="title" label="标题">
@@ -65,7 +65,8 @@ export default {
       formInline: {
         user: "",
         region: ""
-      }
+      },
+      value1:""
     };
   },
   methods: {}
@@ -74,15 +75,15 @@ export default {
 
 <style lang="less">
 .question-content {
-  .el-form-item {    
-    &:not(:last-child) .el-form-item__content{
+  .el-form-item {
+    &:not(:last-child) .el-form-item__content {
       width: 150px;
     }
     &.title {
       .el-form-item__content {
         width: 388px;
       }
-    }
+    }    
   }
 
   // 头卡
@@ -92,6 +93,9 @@ export default {
   .el-form-item__label {
     padding-left: 30px;
     padding-right: 30px;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 150px;
   }
 }
 </style>
