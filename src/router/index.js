@@ -8,83 +8,49 @@ Vue.use(VueRouter)
 // 组件引入
 import login from '../views/login/login.vue'
 import index from '@/views/index/index'
-
-// 主页嵌套路由页面引入
-import chart from '@/views/index/chart/chart'
-import user from '@/views/index/user/user'
-import question from '@/views/index/question/question'
-import subject from '@/views/index/subject/subject'
-import enterprise from '@/views/index/enterprise/enterprise'
+import childrenRouter from './childrenRouter'
 
 // 导入进度条 插件
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 // token 验证相关
-import { removeToken,getToken } from "@/utils/token";
-import { getInfo } from "@/api/index.js";
-import { Message } from 'element-ui'
+import {
+    removeToken,
+    getToken
+} from "@/utils/token";
+import {
+    getInfo
+} from "@/api/index.js";
+import {
+    Message
+} from 'element-ui'
 
-// 导入仓库
+// 导入仓库与相关对象
 import store from '@/store/store.js'
 
 // 创建路由对象
 const router = new VueRouter({
-    routes:[
-        {
+    routes: [{
             path: '/',
-            redirect: '/login',            
+            redirect: '/login',
         },
         {
             path: '/login',
             component: login,
             meta: {
-                title: '登录'
+                title: '登录',
+                rules: ['管理员','老师','学生']
             }
         },
         {
             path: '/index',
             component: index,
             meta: {
-                title: '首页'
+                title: '首页',
+                rules: ['管理员','老师','学生']
             },
-            children: [
-                {
-                    path: "chart",
-                    component: chart,
-                    meta: {
-                        title: '数据概览'
-                    }
-                },
-                {
-                    path: "user",
-                    component: user,
-                    meta: {
-                        title: '用户列表'
-                    }
-                },
-                {
-                    path: "question",
-                    component: question,
-                    meta: {
-                        title: '题库列表'
-                    }
-                },
-                {
-                    path: "enterprise",
-                    component: enterprise,
-                    meta: {
-                        title: '企业列表'
-                    }
-                },
-                {
-                    path: "subject",
-                    component: subject,
-                    meta: {
-                        title: '学科列表'
-                    }
-                }
-            ]
+            children: childrenRouter
         }
     ]
 })
@@ -111,14 +77,33 @@ router.beforeEach((to, from, next) => {
                     next('/login');
                     NProgress.done();
                     removeToken();
-                } else if(res.data.code === 200) {                   
-                    // 成功后，对接口数据进行处理
-                    const userlogin = {
-                        username: res.data.data.username,
-                        avatar: process.env.VUE_APP_URL +'/'+ res.data.data.avatar
-                    };
-                    store.commit('changeUserLogin', userlogin)
-                    next();
+                } else if (res.data.code === 200) {
+                    // 权限判断
+                    if (res.data.data.status == 1) {
+                        // 成功后，对接口数据进行处理
+                        const userlogin = {
+                            username: res.data.data.username,
+                            avatar: process.env.VUE_APP_URL + '/' + res.data.data.avatar
+                        };
+                        // 判定弹框的页面
+                        if (whitePath.includes(from.path)) {
+                            Message.success("欢迎你");
+                        }                       
+                        store.commit('changeUserLogin', userlogin);
+                        // 角色访问页面控制
+                        const role = res.data.data.role; // 获取角色
+                        store.commit('changRole',role);
+                        if (to.meta.rules.includes(role)) {
+                            next();
+                        } else {
+                            Message.warning('对不起，您权限不够');
+                            NProgress.done(); 
+                        }
+                    } else {
+                        Message.warning('当前处于禁用状态，等待管理员审核通过哦~');
+                        next('/login');
+                        NProgress.done();
+                    }
                 }
             })
         }

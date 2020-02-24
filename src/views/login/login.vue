@@ -117,8 +117,7 @@ export default {
             password: this.loginFrom.userProw,
             code:this.loginFrom.verify
           }).then(res => {
-            if (res.data.code == 200) {
-              this.$message.success("欢迎你")
+            if (res.data.code == 200) {              
               setToken(res.data.data.token);
               this.$router.push('/index');
             } else {

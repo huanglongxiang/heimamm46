@@ -16,31 +16,39 @@
     </el-header>
     <el-container>
       <el-aside width="auto">
-        <el-menu router :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse">
-          <el-menu-item index="/index/chart">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
-          </el-menu-item>
-          <el-menu-item index="/index/user">
+        <el-menu
+          router
+          :default-active="$route.path"
+          class="el-menu-vertical-demo"
+          :collapse="isCollapse"
+        >
+          <template v-for="(item, index) in navRouter">
+            <el-menu-item  :key="index" v-if="item.meta.rules.includes($store.state.role)" :index="item.meta.fullPath">
+              <i :class="item.meta.icon"></i>
+              <span slot="title">{{item.meta.title}}</span>
+            </el-menu-item>
+          </template>
+
+          <!-- <el-menu-item v-if="['管理员'].includes($store.state.role)" index="/index/user">
             <i class="el-icon-user"></i>
             <span slot="title">用户列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/question">
+          <el-menu-item v-if="['管理员','老师'].includes($store.state.role)" index="/index/question">
             <i class="el-icon-edit-outline"></i>
             <span slot="title">题库列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/enterprise">
+          <el-menu-item v-if="['管理员','老师'].includes($store.state.role)" index="/index/enterprise">
             <i class="el-icon-office-building"></i>
             <span slot="title">企业列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/subject">
+          <el-menu-item v-if="['管理员','老师','学生'].includes($store.state.role)" index="/index/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-main class="lh0">
-          <router-view></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -49,20 +57,21 @@
 <script>
 import { exitInfo } from "@/api/index.js";
 import { removeToken } from "@/utils/token";
+import navRouter from "@/router/childrenRouter.js";
 
 export default {
   name: "index",
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      navRouter: navRouter
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
     // 注销逻辑
     exitLogin() {
-        // 提示框
+      // 提示框
       this.$confirm("是否退出登录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -75,11 +84,11 @@ export default {
         });
         // 接口调用
         exitInfo().then(res => {
-            if (res.data.code === 200) {
-                removeToken();
-                // 清空仓库
-                this.$store.commit('changeUserLogin',{});
-            }
+          if (res.data.code === 200) {
+            removeToken();
+            // 清空仓库
+            this.$store.commit("changeUserLogin", {});
+          }
         });
       });
     }

@@ -7,12 +7,17 @@ Vue.use(Vuex);
 // 初始化vuex
 const store = new Vuex.Store({
     state:{
-        userlogin:{}
+        userlogin:{},
+        role: ""
     },
     mutations:{
         // 改变 userlogin
         changeUserLogin(state, userlogin) {
             state.userlogin = userlogin;
+        },
+        // 改变 角色
+        changRole(state, newRole) {
+            state.role = newRole
         }
     }
 })

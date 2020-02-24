@@ -96,7 +96,7 @@ const LIST_CONTENT = {
     },
     // 用户编辑
     userEdit: {
-        url: '/enterprise/edit',
+        url: '/user/edit',
         method: 'post'
     },
     // 用户删除
