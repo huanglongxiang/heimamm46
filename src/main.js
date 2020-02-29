@@ -16,6 +16,17 @@ Vue.use(ElementUi)
 import './style/base.css' //基础样式
 import './filter/filter.js'  // 过滤器
 
+// 全局组件导入
+import subjectList from '@/components/subjectName.vue'
+import enterpriseSelect from '@/components/enterpriseSelect.vue'
+import citySelect from '@/components/citySelect.vue'
+import myEditer from '@/components/myediter.vue'
+
+Vue.component('subjectList', subjectList)
+Vue.component('enterpriseSelect', enterpriseSelect)
+Vue.component('citySelect', citySelect)
+Vue.component('myEditer', myEditer);
+
 Vue.config.productionTip = false
 
 Vue.prototype.$getAPI = getAPI

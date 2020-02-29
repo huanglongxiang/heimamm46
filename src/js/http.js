@@ -119,6 +119,41 @@ const LIST_CONTENT = {
         url: '/token',
         method: 'post'
     },
+    // 题库列表
+    questionList: {
+        url: '/question/list',
+        method: 'get'
+    },
+    // 题目编辑
+    questionEdit: {
+        url: '/question/edit',
+        method: 'post'
+    },
+    // 题目删除
+    questionRemove: {
+        url: '/question/remove',
+        method: 'post'
+    },
+    // 题目文件上传
+    questionUpload: {
+        url: '/question/upload',
+        method: 'post'
+    },
+    // 题目信息
+    questionOne: {
+        url: '/question/one',
+        method: 'post'
+    },
+    // 题目添加
+    questionAdd: {
+        url: '/question/add',
+        method: 'post'
+    },
+    // 题目状态
+    questionStatus: {
+        url: '/question/status',
+        method: 'post'
+    },
 }
 
 export default LIST_CONTENT
