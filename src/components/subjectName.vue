@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="selfSubject" placeholder="请选择学科">
-    <el-option label="所有" :value="0"></el-option>
+    <el-option v-if="isShowAll" label="所有" :value="0"></el-option>
     <el-option v-for="item in subjectList" :key="item.id" :label="item.short_name" :value="item.id"></el-option>
   </el-select>
 </template>
@@ -10,7 +10,11 @@ export default {
   name: "subjectName",
   props: {
       value: {
-          type: Number
+          type: [Number, String]
+      },
+      isShowAll: {
+          type: Boolean,
+          default: true
       }
   },
   data() {

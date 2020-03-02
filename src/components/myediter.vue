@@ -1,7 +1,7 @@
 <template>
   <div class="myEditer">
       <div class="totlerbar" ref="totlerbar"></div>
-      <div class="content" ref="content"></div>
+      <div class="mycontent" ref="content"></div>
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
             border: 1px solid #ccc;
             border-bottom: none;
         }
-        .content{
+        .mycontent{
             border: 1px solid #ccc;
             height: 100px;
         }
