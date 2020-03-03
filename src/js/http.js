@@ -154,6 +154,21 @@ const LIST_CONTENT = {
         url: '/question/status',
         method: 'post'
     },
+    // 面板数据接口
+    dataTitle: {
+        url: '/data/title',
+        method: 'post'
+    },
+    // 热门城市题目统计
+    dataHotCities: {
+        url: '/data/hot_cities',
+        method: 'post'
+    },
+    // 企业题目数据统计
+    dataStatistics: {
+        url: '/data/statistics',
+        method: 'post'
+    }, 
 }
 
 export default LIST_CONTENT
